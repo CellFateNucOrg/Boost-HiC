@@ -325,7 +325,7 @@ def clean_out(data, pos_out):
 	containing booleans indicating for each position True if this bin is
 	a outlier, and False if this bin is not.
 	"""
-data[pos_out] = 0
+	data[pos_out] = 0
 	data[:, pos_out] = 0
 	return data
 

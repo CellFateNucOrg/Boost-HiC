@@ -9,14 +9,14 @@ import convert
 
 ### YOU ARE SUPPOSED TO ONLY MODIFY VALUE HERE ###
 #input file
-bedfilename='/users/invites/carron/Documents/Boost-HiC/test_dataset/mouse10kb_fend.bed'
-matrixfilename='/users/invites/carron/Documents/Boost-HiC/test_dataset/chr16ES_10000.matrix'
-Operation='Sample'
-repositoryout='/run/media/carron/0ac0fffa-3350-431d-b1d1-865f8a21db21/data/Hi-C/Mouse/boyan/test/'
+bedfilename='/mnt/imaging.data/mdas/combine_N2_Arima_hicpro/hic_results/matrix/N2/raw/5000/N2_5000_abs.bed'
+matrixfilename='/mnt/imaging.data/mdas/combine_N2_Arima_hicpro/hic_results/matrix/N2/raw/5000/N2_5000.matrix'
+Operation='Boost'
+repositoryout='./results/'
 
 #default parameter
-resolution=10000 #default : 10kb
-achr="chr16"
+resolution=5000 #default : 10kb
+achr="genome"
 alpha=0.2 #AFTER a lot of test : 0.24 is always a good and safe compromise, you must use this value
 ###
 

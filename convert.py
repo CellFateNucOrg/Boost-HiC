@@ -31,6 +31,7 @@ def loadabsdatafile(filein):
 		d["Total"]+=1
 		l=fin.readline()
 	fin.close()
+	d["genome"]=[float(1), float(d["Total"])]
 	return d
 
 def loadmatrix(filein,sizemat):
