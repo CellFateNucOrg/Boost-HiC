@@ -15,7 +15,7 @@ Operation='Boost'
 repositoryout='./results/'
 
 #default parameter
-resolution=5000 #default : 10kb
+resolution=10000 #default : 10kb
 achr="genome"
 alpha=0.2 #AFTER a lot of test : 0.24 is always a good and safe compromise, you must use this value
 ###
