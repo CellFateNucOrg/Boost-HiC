@@ -1,10 +1,5 @@
 from setuptools import setup, find_packages
 
-## to create conda environment call
-#conda create -n boost-hic python=3.8
-#conda activate boost-hic
-#pip install -e .
-
 setup(name='Boost-HiC',
       version='0.0.1',
       description='Boost-HiC: Computational enhancement of long-range contacts in chromosomal contact maps, '
