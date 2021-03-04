@@ -11,4 +11,4 @@
 
 source /home/pmeister/miniconda3/bin/activate boost-hic
 
-python3 /home/pmeister/software/Boost-HiC/main.py
+python3 -u /home/pmeister/software/Boost-HiC/main.py

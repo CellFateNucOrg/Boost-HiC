@@ -1,3 +1,5 @@
+#!/usr/bin/python3 -u
+
 #python 3
 #2017
 #CC-By-SA

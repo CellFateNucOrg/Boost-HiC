@@ -1,11 +1,16 @@
 import h5py
 import numpy as np
+import logging
 import sys
 
 #my own toolkit
 import HiCutils
 import utils
 import convert
+
+logging.basicConfig(level=logging.DEBUG)
+logging.getLogger("").setLevel(logging.INFO)
+logger = logging.getLogger(f'Boos-HiC')
 
 ### YOU ARE SUPPOSED TO ONLY MODIFY VALUE HERE ###
 #input file
@@ -30,7 +35,7 @@ def BoostHiC(amat):
 def Sample(amat,repositoryout):
 	percentofsample=[0.1,1.,10.]
 	for j in percentofsample:
-		print("Value of sample",j)
+		logger.info(f"Value of sample: {j}")
 		chrmat_s=np.copy(amat)
 		chrmat=HiCutils.downsample_basic(chrmat_s,j)
 		fh5 = h5py.File(repositoryout+"inputmat_sampleat_"+str(j)+"_percent.hdf5", "w")
@@ -42,20 +47,21 @@ def Sample(amat,repositoryout):
 ### CODE EXECUTION ###
 
 # load the data
-print("LOADING MATRIX")
+logger.info("LOADING MATRIX")
 D=convert.loadabsdatafile(bedfilename)
+print(*D.items(), sep='\n')
 beginfend=D[achr][0]
 endfend=D[achr][1]
-print("Data fend :",beginfend,endfend)
+logger.info(f"Data fend : {beginfend},{endfend}")
 basemat=convert.loadmatrixselected(matrixfilename,beginfend,endfend)
 
 #matrix filtering
-print("FILTERING")
+logger.info("FILTERING")
 pos_out=HiCutils.get_outliers(basemat)
 basematfilter=basemat[np.ix_(~pos_out, ~pos_out)]
 basematfilter=np.copy(basematfilter)
 #basematfilter=basematfilter[0:1000,0:1000]
-print(len(basemat),len(basematfilter))
+logger.info(f'len(basemat):{len(basemat)}, len(basematfilter):{len(basematfilter)}')
 fh5 = h5py.File(repositoryout+"inputmat.hdf5", "w")
 fh5['data'] = basemat
 fh5.close()
@@ -65,14 +71,14 @@ fh5.close()
 utils.savematrixasfilelist3(pos_out,repositoryout+"filteredbin.txt")
 
 if Operation=="Boost":
-	print("Boost Hic")
+	logger.info("Boost Hic")
 	boosted=BoostHiC(basematfilter)
 	#save
 	fh5 = h5py.File(repositoryout+"boostedmat.hdf5", "w")
 	fh5['data']=boosted
 	fh5.close()
 elif Operation=="Sample":
-	print("SAMPLING")
+	logger.info("SAMPLING")
 	Sample(basematfilter,repositoryout)
 
 
