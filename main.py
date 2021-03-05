@@ -21,8 +21,8 @@ p.add_argument("-m", "--matrixfilename", required=True,
 p.add_argument("-o", "--output", default="./results/", help="output foolder where files are stored")
 p.add_argument("--chr", default="all", help="Which chromosome or the whole genome to boost.")
 #p.add_argument("-r", "--resolution", default=10000, help="Matrix Resolution")
-p.add_argument("operation", default="Boost", choices=["Boost", "Sample"],
-			   help="Operations to be executed")
+p.add_argument("operation", default="boost", choices=["boost", "sample"],
+			   help="Operation to be executed")
 args = p.parse_args(sys.argv[1:])
 
 ### YOU ARE SUPPOSED TO ONLY MODIFY VALUE HERE ###
@@ -85,14 +85,14 @@ fh5['data']=basematfilter
 fh5.close()
 utils.savematrixasfilelist3(pos_out,repositoryout+"filteredbin.txt")
 
-if Operation=="Boost":
+if Operation=="boost":
 	logger.info("Boost Hic")
 	boosted=BoostHiC(basematfilter)
 	#save
 	fh5 = h5py.File(repositoryout+"boostedmat.hdf5", "w")
 	fh5['data']=boosted
 	fh5.close()
-elif Operation=="Sample":
+elif Operation=="sample":
 	logger.info("SAMPLING")
 	Sample(basematfilter,repositoryout)
 
