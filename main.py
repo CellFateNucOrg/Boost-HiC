@@ -20,7 +20,7 @@ p.add_argument("-m", "--matrixfilename", required=True,
 			   help="contact map stored in tab separated file as : "
 					"bin_i / bin_j / counts_ij Only no zero values are stored. Contact map are symmetric")
 p.add_argument("-o", "--output", default="./results/", help="output foolder where files are stored")
-p.add_argument("--chr", default="all", help="Which chromosome or the whole genome to boost.")
+p.add_argument("-c", "--chr", default="all", help="Which chromosome or the whole genome to boost.")
 #p.add_argument("-r", "--resolution", default=10000, help="Matrix Resolution")
 p.add_argument("operation", default="boost", choices=["boost", "sample"],
 			   help="Operation to be executed")
