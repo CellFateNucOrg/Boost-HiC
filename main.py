@@ -20,6 +20,7 @@ p.add_argument("-m", "--matrixfilename", required=True,
 			   help="contact map stored in tab separated file as : "
 					"bin_i / bin_j / counts_ij Only no zero values are stored. Contact map are symmetric")
 p.add_argument("-o", "--output_prefix", default="./results/", help="prefix for output files")
+p.add_argument("-f", "--format", default="hdf5", choices=["hdf5", "matrix"], help="output file format")
 p.add_argument("-c", "--chr", default="all", help="Which chromosome or the whole genome to boost.")
 #p.add_argument("-r", "--resolution", default=10000, help="Matrix Resolution")
 p.add_argument("operation", default="boost", choices=["boost", "sample"],
@@ -32,7 +33,7 @@ bedfilename = args.bedfilename  # '/mnt/imaging.data/mdas/combine_N2_Arima_hicpr
 # '/Users/todor/unibe/data/combine_N2_Arima_hicpro/N2_5000_abs.bed'
 matrixfilename = args.matrixfilename   # '/mnt/imaging.data/mdas/combine_N2_Arima_hicpro/hic_results/matrix/N2/raw/5000/N2_5000.matrix'
 # '/Users/todor/unibe/data/combine_N2_Arima_hicpro/N2_5000.matrix'
-repositoryout = args.output   # './results/'
+repositoryout = args.output_prefix   # './results/'
 achr = args.chr   # "genome"
 Operation = args.operation     # 'Boost'
 
@@ -93,9 +94,12 @@ if Operation=="boost":
 	logger.info("Boost Hic")
 	boosted=BoostHiC(basematfilter)
 	#save
-	fh5 = h5py.File(repositoryout+"boostedmat.hdf5", "w")
-	fh5['data']=boosted
-	fh5.close()
+	if args.format == "hdf5":
+		fh5 = h5py.File(repositoryout+"boostedmat.hdf5", "w")
+		fh5['data']=boosted
+		fh5.close()
+	else:
+		np.savetxt(repositoryout+"boostedmat.matrix", boosted, delimiter="\t")
 elif Operation=="sample":
 	logger.info("SAMPLING")
 	Sample(basematfilter,repositoryout)
