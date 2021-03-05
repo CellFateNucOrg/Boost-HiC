@@ -1,6 +1,7 @@
 import h5py
 import numpy as np
 import logging
+import argparse
 import sys
 
 #my own toolkit
@@ -12,16 +13,30 @@ logging.basicConfig(level=logging.DEBUG)
 logging.getLogger("").setLevel(logging.INFO)
 logger = logging.getLogger(f'Boos-HiC')
 
+p = argparse.ArgumentParser()
+p.add_argument("-b", "--bedfilename", required=True, help="bed file of genomic coordinate of each bin")
+p.add_argument("-m", "--matrixfilename", required=True,
+			   help="contact map stored in tab separated file as : "
+					"bin_i / bin_j / counts_ij Only no zero values are stored. Contact map are symmetric")
+p.add_argument("-o", "--output", default="./results/", help="output foolder where files are stored")
+p.add_argument("--chr", default="all", help="Which chromosome or the whole genome to boost.")
+#p.add_argument("-r", "--resolution", default=10000, help="Matrix Resolution")
+p.add_argument("operation", default="Boost", choices=["Boost", "Sample"],
+			   help="Operations to be executed")
+args = p.parse_args(sys.argv[1:])
+
 ### YOU ARE SUPPOSED TO ONLY MODIFY VALUE HERE ###
 #input file
-bedfilename='/mnt/imaging.data/mdas/combine_N2_Arima_hicpro/hic_results/matrix/N2/raw/5000/N2_5000_abs.bed'
-matrixfilename='/mnt/imaging.data/mdas/combine_N2_Arima_hicpro/hic_results/matrix/N2/raw/5000/N2_5000.matrix'
-Operation='Boost'
-repositoryout='./results/'
+bedfilename = args.bedfilename  # '/mnt/imaging.data/mdas/combine_N2_Arima_hicpro/hic_results/matrix/N2/raw/5000/N2_5000_abs.bed'
+# '/Users/todor/unibe/data/combine_N2_Arima_hicpro/N2_5000_abs.bed'
+matrixfilename = args.matrixfilename   # '/mnt/imaging.data/mdas/combine_N2_Arima_hicpro/hic_results/matrix/N2/raw/5000/N2_5000.matrix'
+# '/Users/todor/unibe/data/combine_N2_Arima_hicpro/N2_5000.matrix'
+repositoryout = args.output   # './results/'
+achr = args.chr   # "genome"
+Operation = args.operation     # 'Boost'
 
 #default parameter
-resolution=10000 #default : 10kb
-achr="genome"
+#resolution=10000 #default : 10kb
 alpha=0.2 #AFTER a lot of test : 0.24 is always a good and safe compromise, you must use this value
 ###
 
