@@ -63,6 +63,9 @@ def Sample(amat,repositoryout):
 ### CODE EXECUTION ###
 os.mkdir(repositoryout)
 
+if not repositoryout[-1] == '/':
+	repositoryout += '/'
+
 # load the data
 logger.info("LOADING MATRIX")
 D=convert.loadabsdatafile(bedfilename)
