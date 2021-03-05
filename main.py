@@ -3,6 +3,7 @@ import numpy as np
 import logging
 import argparse
 import sys
+import os
 
 #my own toolkit
 import HiCutils
@@ -47,6 +48,7 @@ def BoostHiC(amat):
 	boostedmat=HiCutils.adjustPdS(normmat,FFmat)
 	return boostedmat
 
+
 def Sample(amat,repositoryout):
 	percentofsample=[0.1,1.,10.]
 	for j in percentofsample:
@@ -58,8 +60,8 @@ def Sample(amat,repositoryout):
 		fh5.close()
 
 
-
 ### CODE EXECUTION ###
+os.mkdir(repositoryout)
 
 # load the data
 logger.info("LOADING MATRIX")
