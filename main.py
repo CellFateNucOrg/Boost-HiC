@@ -19,7 +19,7 @@ p.add_argument("-b", "--bedfilename", required=True, help="bed file of genomic c
 p.add_argument("-m", "--matrixfilename", required=True,
 			   help="contact map stored in tab separated file as : "
 					"bin_i / bin_j / counts_ij Only no zero values are stored. Contact map are symmetric")
-p.add_argument("-o", "--output", default="./results/", help="output foolder where files are stored")
+p.add_argument("-o", "--output_prefix", default="./results/", help="prefix for output files")
 p.add_argument("-c", "--chr", default="all", help="Which chromosome or the whole genome to boost.")
 #p.add_argument("-r", "--resolution", default=10000, help="Matrix Resolution")
 p.add_argument("operation", default="boost", choices=["boost", "sample"],
@@ -61,10 +61,9 @@ def Sample(amat,repositoryout):
 
 
 ### CODE EXECUTION ###
-os.mkdir(repositoryout)
-
-if not repositoryout[-1] == '/':
-	repositoryout += '/'
+#os.mkdir(repositoryout)
+#if not repositoryout[-1] == '/':
+#	repositoryout += '/'
 
 # load the data
 logger.info("LOADING MATRIX")
