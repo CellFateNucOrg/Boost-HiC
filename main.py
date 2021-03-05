@@ -9,6 +9,7 @@ import os
 import HiCutils
 import utils
 import convert
+import hic_converters as hc
 
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger("").setLevel(logging.INFO)
@@ -20,9 +21,9 @@ p.add_argument("-m", "--matrixfilename", required=True,
 			   help="contact map stored in tab separated file as : "
 					"bin_i / bin_j / counts_ij Only no zero values are stored. Contact map are symmetric")
 p.add_argument("-o", "--output_prefix", default="./results/", help="prefix for output files")
-p.add_argument("-f", "--format", default="hdf5", choices=["hdf5", "matrix"], help="output file format")
+p.add_argument("-f", "--format", default="", choices=["", "hdf5", "matrix", "cool"], help="output file format, Default both")
 p.add_argument("-c", "--chr", default="all", help="Which chromosome or the whole genome to boost.")
-#p.add_argument("-r", "--resolution", default=10000, help="Matrix Resolution")
+p.add_argument("-r", "--resolution", default=5000, help="Matrix Resolution")
 p.add_argument("operation", default="boost", choices=["boost", "sample"],
 			   help="Operation to be executed")
 args = p.parse_args(sys.argv[1:])
@@ -35,10 +36,10 @@ matrixfilename = args.matrixfilename   # '/mnt/imaging.data/mdas/combine_N2_Arim
 # '/Users/todor/unibe/data/combine_N2_Arima_hicpro/N2_5000.matrix'
 repositoryout = args.output_prefix   # './results/'
 achr = args.chr   # "genome"
+resolution = args.resolution #default : 10kb
 Operation = args.operation     # 'Boost'
 
 #default parameter
-#resolution=10000 #default : 10kb
 alpha=0.2 #AFTER a lot of test : 0.24 is always a good and safe compromise, you must use this value
 ###
 
@@ -94,12 +95,14 @@ if Operation=="boost":
 	logger.info("Boost Hic")
 	boosted=BoostHiC(basematfilter)
 	#save
-	if args.format == "hdf5":
+	if args.format is None or args.format == "hdf5":
 		fh5 = h5py.File(repositoryout+"boostedmat.hdf5", "w")
 		fh5['data']=boosted
 		fh5.close()
-	else:
+	if args.format is None or args.format == "matrix":
 		np.savetxt(repositoryout+"boostedmat.matrix", boosted, delimiter="\t")
+	if args.format is None or args.format == "cool":
+		hc.hic_to_cool(boosted, achr, resolution, repositoryout+"boostedmat.cool")
 elif Operation=="sample":
 	logger.info("SAMPLING")
 	Sample(basematfilter,repositoryout)

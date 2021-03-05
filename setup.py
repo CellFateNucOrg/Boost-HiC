@@ -7,5 +7,5 @@ setup(name='Boost-HiC',
       url='https://github.com/CellFateNucOrg/Boost-HiC',
       packages=find_packages(),
       python_requires='>=3.8',
-      install_requires=['numpy', 'scipy', 'h5py', 'scikit-learn', 'scikit-image'],
+      install_requires=['numpy', 'scipy', 'h5py', 'scikit-learn', 'scikit-image', 'pandas', 'cooler', 'matplotlib'],
       zip_safe=False)
