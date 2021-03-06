@@ -34,7 +34,7 @@ bedfilename = args.bedfilename  # '/mnt/imaging.data/mdas/combine_N2_Arima_hicpr
 matrixfilename = args.matrixfilename   # '/mnt/imaging.data/mdas/combine_N2_Arima_hicpro/hic_results/matrix/N2/raw/5000/N2_5000.matrix'
 # '/Users/todor/unibe/data/combine_N2_Arima_hicpro/N2_5000.matrix'
 achr = args.chr   # "genome"
-repositoryout = args.output_prefix + achr  # './results/'
+repositoryout = f'{args.output_prefix}_{achr}_'  # './results/'
 # resolution = args.resolution #default : 10kb
 Operation = args.operation     # 'Boost'
 
