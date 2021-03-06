@@ -9,7 +9,6 @@ import os
 import HiCutils
 import utils
 import convert
-import hic_converters as hc
 
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger("").setLevel(logging.INFO)
@@ -21,9 +20,9 @@ p.add_argument("-m", "--matrixfilename", required=True,
 			   help="contact map stored in tab separated file as : "
 					"bin_i / bin_j / counts_ij Only no zero values are stored. Contact map are symmetric")
 p.add_argument("-o", "--output_prefix", default="./results/", help="prefix for output files")
-p.add_argument("-f", "--format", default="", choices=["", "hdf5", "matrix", "cool"], help="output file format, Default both")
+p.add_argument("-f", "--format", default="", choices=["", "hdf5", "cool"], help="output file format, Default both")
 p.add_argument("-c", "--chr", default="all", help="Which chromosome or the whole genome to boost.")
-p.add_argument("-r", "--resolution", default=5000, help="Matrix Resolution")
+# p.add_argument("-r", "--resolution", default=5000, help="Matrix Resolution")
 p.add_argument("operation", default="boost", choices=["boost", "sample"],
 			   help="Operation to be executed")
 args = p.parse_args(sys.argv[1:])
@@ -34,9 +33,9 @@ bedfilename = args.bedfilename  # '/mnt/imaging.data/mdas/combine_N2_Arima_hicpr
 # '/Users/todor/unibe/data/combine_N2_Arima_hicpro/N2_5000_abs.bed'
 matrixfilename = args.matrixfilename   # '/mnt/imaging.data/mdas/combine_N2_Arima_hicpro/hic_results/matrix/N2/raw/5000/N2_5000.matrix'
 # '/Users/todor/unibe/data/combine_N2_Arima_hicpro/N2_5000.matrix'
-repositoryout = args.output_prefix   # './results/'
 achr = args.chr   # "genome"
-resolution = args.resolution #default : 10kb
+repositoryout = args.output_prefix + achr  # './results/'
+# resolution = args.resolution #default : 10kb
 Operation = args.operation     # 'Boost'
 
 #default parameter
@@ -69,7 +68,7 @@ def Sample(amat,repositoryout):
 
 # load the data
 logger.info("LOADING MATRIX")
-D=convert.loadabsdatafile(bedfilename)
+D, resolution = convert.loadabsdatafile(bedfilename)
 print(*D.items(), sep='\n')
 beginfend=D[achr][0]
 endfend=D[achr][1]
@@ -83,12 +82,18 @@ basematfilter=basemat[np.ix_(~pos_out, ~pos_out)]
 basematfilter=np.copy(basematfilter)
 #basematfilter=basematfilter[0:1000,0:1000]
 logger.info(f'len(basemat):{len(basemat)}, len(basematfilter):{len(basematfilter)}')
-fh5 = h5py.File(repositoryout+"inputmat.hdf5", "w")
-fh5['data'] = basemat
-fh5.close()
-fh5 = h5py.File(repositoryout+"inputmat_filtered.hdf5", "w")
-fh5['data']=basematfilter
-fh5.close()
+if args.format is None or args.format == "hdf5":
+	fh5 = h5py.File(repositoryout+"inputmat.hdf5", "w")
+	fh5['data'] = basemat
+	fh5.close()
+if args.format is None or args.format == "cool":
+	convert.hic_to_cool(basemat, achr, resolution, repositoryout+"inputmat.cool")
+if args.format is None or args.format == "hdf5":
+	fh5 = h5py.File(repositoryout+"inputmat_filtered.hdf5", "w")
+	fh5['data']=basematfilter
+	fh5.close()
+if args.format is None or args.format == "cool":
+	convert.hic_to_cool(basematfilter, achr, resolution, repositoryout+"inputmat_filtered.cool")
 utils.savematrixasfilelist3(pos_out,repositoryout+"filteredbin.txt")
 
 if Operation=="boost":
@@ -99,10 +104,8 @@ if Operation=="boost":
 		fh5 = h5py.File(repositoryout+"boostedmat.hdf5", "w")
 		fh5['data']=boosted
 		fh5.close()
-	if args.format is None or args.format == "matrix":
-		np.savetxt(repositoryout+"boostedmat.matrix", boosted, delimiter="\t")
 	if args.format is None or args.format == "cool":
-		hc.hic_to_cool(boosted, achr, resolution, repositoryout+"boostedmat.cool")
+		convert.hic_to_cool(boosted, achr, resolution, repositoryout+"boostedmat.cool")
 elif Operation=="sample":
 	logger.info("SAMPLING")
 	Sample(basematfilter,repositoryout)
