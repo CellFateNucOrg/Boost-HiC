@@ -10,6 +10,23 @@ Boost-HiC current implementation is in python 3 and need the current list of pac
 -scipy
 -skimage
 
+Installation :
+=================
+
+clone repository and install conda environment with the following commands:
+
+    git clone https://github.com/CellFateNucOrg/Boost-HiC.git
+    cd Boost-HiC
+    ./install.sh
+
+You can complete the installation with the proposed changes at the end.
+Help can be recalled with the command:
+    
+    # if you are in the instalation folder:
+    ./mainy.py --help
+    # or if you properly updated your start shell script meant for running also in a SLURM environment:
+    boost-hic.sh --help
+
 Input :
 =================
 Boost-HiC use HiC-Pro output format (described in : http://nservant.github.io/HiC-Pro/MANUAL.html#browsing-the-results ) for raw contact map.
@@ -39,11 +56,12 @@ Some usefull tool are available in HiCtools.py if you need to made your own scri
 
 Output :
 =================
-Every ouput contact map are stored in hdf5 with the key 'data' in the hdf5 dict. 
+Every output contact map are stored in hdf5 with the key 'data' in the hdf5 dict.
+Alternatively, you can have the results in a cooler format by using the '--format cool' option.
 
--inputmat.hdf5 : The contact map that is load in .matrix at the begin, just convert in hdf5
--inputmat_filtered.hdf5 : The original contact map with some filtered bin
+-inputmat.hdf5/cool  : The contact map that is load in .matrix at the begin, just convert in hdf5
+-inputmat_filtered.hdf5/cool : The original contact map with some filtered bin
 -filteredbin.txt : list of raw/col that are filtered or not in the contact map as a boolean list.
--boostedmat.hdf5 : The input mat improved by BoostHiC procedure.
+-boostedmat.hdf5/cool : The input mat improved by BoostHiC procedure.
 
 
