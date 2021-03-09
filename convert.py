@@ -84,6 +84,16 @@ def loadmatrixselected(filein, B, E):
     return mat
 
 
+def correct_bin_id(bin_id: int, filtered_bins) -> int:
+    corrected_id = bin_id
+    if filtered_bins:
+        filtered_offset = np.sum(filtered_bins[:corrected_id])
+        while (corrected_id - bin_id) != filtered_offset:
+            corrected_id += filtered_offset - (corrected_id - bin_id)
+            filtered_offset = np.sum(filtered_bins[:corrected_id])
+    return corrected_id
+
+
 def get_bins_pixels(hic, chrom, resolution, bin_offs=0, bins_num=None, filtered_bins=None):
     """
     Get bins and pixels as needed for cooler format
@@ -110,17 +120,18 @@ def get_bins_pixels(hic, chrom, resolution, bin_offs=0, bins_num=None, filtered_
     for bin1_id in range(N - 1):
         for bin2_id in range(bin1_id + 1, N):
             it += 1
-            progress = int((it / tot_iter) * 100)
-            if (progress % 10) == 0:
-                print(f'pixels progress: {progress}%')
+            if (it % 1000000) == 0:
+                progress = (it / tot_iter) * 100
+                print(f'pixels progress: {int(progress)}%')
             count = hic[bin1_id, bin2_id]
             if count != 0:
                 # sum filtered up to bin_id
-                # TODO if filtered_bins: calculate the filtered out offset for bin1_id and bin2_id
-                pixels_bin1_id.append(bin_offs + np.int64(bin1_id))
-                pixels_bin2_id.append(bin_offs + np.int64(bin2_id))
+                bin1_id_corrected = correct_bin_id(np.int64(bin1_id), filtered_bins)
+                pixels_bin1_id.append(bin_offs + bin1_id_corrected)
+                bin2_id_corrected = correct_bin_id(np.int64(bin2_id), filtered_bins)
+                pixels_bin2_id.append(bin_offs + bin2_id_corrected)
                 pixels_count.append(count)
-
+    print(f'pixels progress: 100%')
     pixels = pd.DataFrame({'bin1_id': pixels_bin1_id, 'bin2_id': pixels_bin2_id, 'count': pixels_count},
                           columns=['bin1_id', 'bin2_id', 'count'])
     return bins, pixels

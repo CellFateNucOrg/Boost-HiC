@@ -1,3 +1,5 @@
+#!/usr/bin/python3 -u
+
 import h5py
 import numpy as np
 import logging
@@ -117,7 +119,8 @@ for chrom in chroms:
         if format is None or format == "cool":
             filtered_bins = pos_out if keep_filtered_bins else None
             chrom_bins, chrom_pixels = convert.get_bins_pixels(boosted, chrom, resolution,
-                                                               bin_offs=bin_offs, bins_num=bins_num)
+                                                               bin_offs=bin_offs, bins_num=bins_num,
+                                                               filtered_bins=filtered_bins)
             bins_boosted = pd.concat([bins_boosted, chrom_bins])
             pixels_boosted = pd.concat([pixels_boosted, chrom_pixels])
             bin_offs += bins_num
@@ -128,7 +131,7 @@ for chrom in chroms:
 
 if Operation == "boost" and format is None or format == "cool":  # combined file support only for .cool
     repositoryout = args.output_prefix + (f'_{"_".join(chromosomes)}_' if chromosomes else '_')
-    cool_file = repositoryout + "boosted.cool"
+    cool_file = repositoryout + ("_fb_" if keep_filtered_bins else "") + "boosted.cool"
     convert.create_cool(bins_boosted, pixels_boosted, resolution, cool_file, genome_assembly=genome_assembly)
 
     cmd = f'cooler balance --cis-only --force {cool_file}'
