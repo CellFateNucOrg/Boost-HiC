@@ -84,9 +84,9 @@ def loadmatrixselected(filein, B, E):
     return mat
 
 
-def correct_bin_id(bin_id: int, filtered_bins) -> int:
+def correct_bin_id(bin_id: int, filtered_bins: np.array) -> int:
     corrected_id = bin_id
-    if filtered_bins:
+    if filtered_bins is not None:
         filtered_offset = np.sum(filtered_bins[:corrected_id])
         while (corrected_id - bin_id) != filtered_offset:
             corrected_id += filtered_offset - (corrected_id - bin_id)

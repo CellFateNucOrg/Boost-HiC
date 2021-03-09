@@ -73,6 +73,7 @@ def Sample(amat, repositoryout):
 logger.info("LOADING MATRIX")
 D, total, resolution = convert.loadabsdatafile(bedfilename)
 print(*D.items(), sep='\n')
+print(f'Total bins:{total} resolution:{resolution}')
 
 bins_boosted = pd.DataFrame(columns=['chrom', 'start', 'end'])
 pixels_boosted = pd.DataFrame(columns=['bin1_id', 'bin2_id', 'count'])
@@ -83,7 +84,7 @@ for chrom in chroms:
 
     beginfend = D[chrom][0]
     endfend = D[chrom][1]
-    logger.info(f"Data fend : {beginfend},{endfend}")
+    logger.info(f"Chromosome {chrom} data fend : {beginfend},{endfend}")
     basemat = convert.loadmatrixselected(matrixfilename, beginfend, endfend)
 
     # matrix filtering
