@@ -1,17 +1,18 @@
 #!/usr/bin/python3 -u
 
+import argparse
+import logging
+import os
+
 import h5py
 import numpy as np
-import logging
-import argparse
-import sys
 import pandas as pd
-import os
+import sys
 
 # my own toolkit
 import HiCutils
-import utils
 import convert
+import utils
 
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger("").setLevel(logging.INFO)
@@ -46,6 +47,8 @@ genome_assembly = args.genome_assembly
 
 # default parameter
 alpha = 0.2  # AFTER a lot of test : 0.24 is always a good and safe compromise, you must use this value
+
+
 ###
 
 
@@ -101,13 +104,15 @@ for chrom in chroms:
         fh5['data'] = basemat
         fh5.close()
     if format is None or format == "cool":
-        convert.hic_to_cool(basemat, chrom, resolution, repositoryout + "inputmat.cool", genome_assembly=genome_assembly)
+        convert.hic_to_cool(basemat, chrom, resolution, repositoryout + "inputmat.cool",
+                            genome_assembly=genome_assembly)
     if format is None or format == "hdf5":
         fh5 = h5py.File(repositoryout + "inputmat_filtered.hdf5", "w")
         fh5['data'] = basematfilter
         fh5.close()
     if format is None or format == "cool":
-        convert.hic_to_cool(basematfilter, chrom, resolution, repositoryout + "inputmat_filtered.cool", genome_assembly=genome_assembly)
+        convert.hic_to_cool(basematfilter, chrom, resolution, repositoryout + "inputmat_filtered.cool",
+                            genome_assembly=genome_assembly)
 
     if Operation == "boost":
         logger.info("Boost Hic")
@@ -132,7 +137,7 @@ for chrom in chroms:
 
 if Operation == "boost" and format is None or format == "cool":  # combined file support only for .cool
     repositoryout = args.output_prefix + (f'_{"_".join(chromosomes)}_' if chromosomes else '_')
-    cool_file = repositoryout + ("_fb_" if keep_filtered_bins else "") + "boosted.cool"
+    cool_file = f"{repositoryout}boosted{'_kfb' if keep_filtered_bins else ''}.cool"
     convert.create_cool(bins_boosted, pixels_boosted, resolution, cool_file, genome_assembly=genome_assembly)
 
     cmd = f'cooler balance --cis-only --force {cool_file}'

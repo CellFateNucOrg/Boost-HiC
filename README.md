@@ -19,6 +19,31 @@ clone repository and install conda environment with the following commands:
     cd Boost-HiC
     ./install.sh
 
+Troubleshooting:
+
+If you encounter some problems running install.sh script, you can execute the following commands manually:
+
+    conda create -n boost-hic python=3.8
+    conda activate boost-hic
+    pip install -e .
+
+You can activate conda environment like this:
+
+    conda activate boost-hic
+
+
+You can also add the following line to your .bashrc, or .zshrc, or .bash_profile:
+
+    export PATH=$PATH:<BOOST_INSTALLATION_FOLDER>"
+
+You can check your active shell like this:
+
+    echo $SHELL
+
+
+You can also change and update your start shell script boost-hic.sh command.
+
+
 You can complete the installation with the proposed changes at the end.
 Help can be recalled with the command:
     
