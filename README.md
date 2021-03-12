@@ -107,9 +107,10 @@ Here all CLI (command line interface) parameters:
     Which chromosomes to boost, otherwise all chromosomes
     
     -o OUTPUT_PREFIX, --output_prefix OUTPUT_PREFIX
-    Prefix for output files, including output folder. If not given, it will be the same
-    as the input matrixfilename without its file extension butplus '\_boosted\_'.
-    
+    Prefix for output files, including the output folder. If not given, it will be in
+    subfolder './boosted/' plus asename of the input matrixfilename without its file
+    extension.
+
     -f {cool,hdf5}, --format {cool,hdf5}
     output file format
     

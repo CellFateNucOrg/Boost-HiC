@@ -28,9 +28,9 @@ p.add_argument("-m", "--matrixfilename", required=True,
 # TODO add support for input .cool file
 p.add_argument("-c", "--chromosomes", nargs='+', help="Which chromosomes to boost, otherwise all chromosomes")
 p.add_argument("-o", "--output_prefix", default=None,
-               help="Prefix for output files, including output folder. "
-                    "If not given, it will be the same as the input matrixfilename without its file extension but"
-                    "plus '_boosted_'.")
+               help="Prefix for output files, including the output folder. "
+                    "If not given, it will be in subfolder './boosted/' plus basename of the input matrixfilename "
+                    "without its file extension.")
 p.add_argument("-f", "--format", default="cool", choices=["cool", "hdf5"], help="output file format")
 p.add_argument("-g", "--genome_assembly", default="ce11", help="genome assembly as metadata for .cool file")
 p.add_argument("-k", "--keep_filtered_bins", action='store_true',
@@ -53,8 +53,9 @@ alpha = args.alpha
 if args.output_prefix:
     output_prefix = args.output_prefix
 else:
-    output_prefix = os.path.splitext(matrixfilename)[0] + '_boosted_'
-    # output_prefix = os.path.splitext(os.path.basename(matrixfilename))[0]
+    output_prefix = './boosted/' + os.path.splitext(os.path.basename(matrixfilename))[0]
+    # alternative in the same folder of the input matrix
+    # output_prefix = os.path.splitext(matrixfilename)[0]
 
 ###
 
