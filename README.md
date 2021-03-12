@@ -74,10 +74,56 @@ Important parameter are :
 -Operation : 'Boost' or 'Sample'
 -repositoryout : where output file are stored
 
--resolution : default is 10000 basepair, change it if you need
+-resolution : is taken from the bed file
 -alpha : the alpha used to Boost-HiC
 
 Some usefull tool are available in HiCtools.py if you need to made your own script.
+
+Here all CLI (command line interface) parameters:
+
+`
+usage: main.py [-h] -b BEDFILENAME -m MATRIXFILENAME [-c CHROMOSOMES [CHROMOSOMES ...]] [-o OUTPUT_PREFIX]
+[-f {cool,hdf5}] [-g GENOME_ASSEMBLY] [-k]
+{boost,sample}
+
+positional arguments:
+{boost,sample}        Operation to be executed
+
+optional arguments:
+
+-h, --help            show this help message and exit
+
+-b BEDFILENAME, --bedfilename BEDFILENAME
+bed file of genomic coordinate of each bin
+
+-m MATRIXFILENAME, --matrixfilename MATRIXFILENAME
+contact map stored in tab separated file as : bin_i / bin_j / counts_ij Only no zero
+values are stored. Contact map are symmetric
+
+-c CHROMOSOMES [CHROMOSOMES ...], --chromosomes CHROMOSOMES [CHROMOSOMES ...]
+Which chromosomes to boost, otherwise all chromosomes
+
+-o OUTPUT_PREFIX, --output_prefix OUTPUT_PREFIX
+prefix for output files
+
+-f {cool,hdf5}, --format {cool,hdf5}
+output file format
+
+-g GENOME_ASSEMBLY, --genome_assembly GENOME_ASSEMBLY
+genome assembly as metadata for .cool file
+
+-k, --keep_filtered_bins
+Whether to keep filtered out bins, otherwise they will be removed from the result
+matrix. Not used yet.
+`
+
+Example call:
+
+    main boost -b ./N2_5000_abs.bed -m N2_5000.matrix -o results/N2_5000 -f cool -k
+
+Or if you are in SLURM environment and adapted your boost-hic.sh script
+
+    sbatch boost-hic.sh boost -b ./N2_5000_abs.bed -m N2_5000.matrix -o results/N2_5000 -f cool -k
 
 Output :
 =================

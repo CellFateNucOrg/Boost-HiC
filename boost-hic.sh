@@ -6,13 +6,10 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --partition=all
 #SBATCH --job-name="boost-hic"
-##SBATCH --mail-user=todor.gitchev@izb.unibe.ch
+##SBATCH --mail-user=your@email
 ##SBATCH --mail-type=fail,end
 
-source /home/pmeister/miniconda3/bin/activate boost-hic
+source <your_home>/miniconda3/bin/activate boost-hic
 
 echo "CALL: Boost-HiC/main.py $@"
-python3 -u /home/pmeister/software/github/Boost-HiC/main.py "$@"
-
-## example call
-# ./boost-hic.sh -b /mnt/imaging.data/mdas/combine_N2_Arima_hicpro/hic_results/matrix/N2/raw/5000/N2_5000_abs.bed -m /mnt/imaging.data/mdas/combine_N2_Arima_hicpro/hic_results/matrix/N2/raw/5000/N2_5000.matrix -c chrII -o ./results/N2_chrII_ -f matrix boost
+python3 -u <your_home>software/github/Boost-HiC/main.py "$@"
