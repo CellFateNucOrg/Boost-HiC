@@ -134,8 +134,11 @@ Every output contact map are stored in hdf5 with the key 'data' in the hdf5 dict
 Alternatively, you can have the results in a cooler format by using the '--format cool' option.
 
 -inputmat.hdf5/cool  : The contact map that is load in .matrix at the begin, just convert in hdf5
+
 -inputmat_filtered.hdf5/cool : The original contact map with some filtered bin
+
 -filteredbin.txt : list of raw/col that are filtered or not in the contact map as a boolean list.
+
 -boostedmat.hdf5/cool : The input mat improved by BoostHiC procedure.
 
 
