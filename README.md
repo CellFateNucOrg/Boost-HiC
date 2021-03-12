@@ -48,7 +48,7 @@ You can complete the installation with the proposed changes at the end.
 Help can be recalled with the command:
     
     # if you are in the instalation folder:
-    ./mainy.py --help
+    ./boost-hic.py --help
     # or if you properly updated your start shell script meant for running also in a SLURM environment:
     boost-hic.sh --help
 
@@ -66,23 +66,21 @@ In a first step, the contact map are convert in hdf5 by the pipeline.
 
 How to use it
 =================
-The script is made to be most easy to use ad possible, just eddit the file main.py and run it as :
-python main.py 
+There is a convenient command line interface (CLI) provided by the python script boost-hic.py 
 
 Important parameter are :
 -bedfilename : bed file of genomic coordinate of each bin
 -Operation : 'Boost' or 'Sample'
--repositoryout : where output file are stored
-
--resolution : is taken from the bed file
--alpha : the alpha used to Boost-HiC
+-output_prefix : prefix used to save the output files
+-format : output format. Possible values: cool, hdf5. Default: cool
+-alpha : the alpha used to Boost-HiC, with preset default value
 
 Some usefull tool are available in HiCtools.py if you need to made your own script.
 
 Here all CLI (command line interface) parameters:
 
 `
-usage: main.py [-h] -b BEDFILENAME -m MATRIXFILENAME [-c CHROMOSOMES [CHROMOSOMES ...]] [-o OUTPUT_PREFIX]
+usage: boost-hic.py [-h] -b BEDFILENAME -m MATRIXFILENAME [-c CHROMOSOMES [CHROMOSOMES ...]] [-o OUTPUT_PREFIX]
 [-f {cool,hdf5}] [-g GENOME_ASSEMBLY] [-k]
 {boost,sample}
 
@@ -115,11 +113,16 @@ genome assembly as metadata for .cool file
 -k, --keep_filtered_bins
 Whether to keep filtered out bins, otherwise they will be removed from the result
 matrix. Not used yet.
+
+-a ALPHA, --alpha ALPHA
+AFTER a lot of test : 0.24 is always a good and safe compromise, you must use this
+value
+
 `
 
 Example call:
 
-    main boost -b ./N2_5000_abs.bed -m N2_5000.matrix -o results/N2_5000 -f cool -k
+    boost-hic.py boost -b ./N2_5000_abs.bed -m N2_5000.matrix -o results/N2_5000 -f cool -k
 
 Or if you are in SLURM environment and adapted your boost-hic.sh script
 

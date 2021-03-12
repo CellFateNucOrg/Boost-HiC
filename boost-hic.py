@@ -27,27 +27,25 @@ p.add_argument("-m", "--matrixfilename", required=True,
                     "bin_i / bin_j / counts_ij Only no zero values are stored. Contact map are symmetric")
 # TODO add support for input .cool file
 p.add_argument("-c", "--chromosomes", nargs='+', help="Which chromosomes to boost, otherwise all chromosomes")
-p.add_argument("-o", "--output_prefix", default="./results/", help="prefix for output files")
+p.add_argument("-o", "--output_prefix", default="./boosted/", help="prefix for output files")
 p.add_argument("-f", "--format", default="cool", choices=["cool", "hdf5"], help="output file format")
 p.add_argument("-g", "--genome_assembly", default="ce11", help="genome assembly as metadata for .cool file")
 p.add_argument("-k", "--keep_filtered_bins", action='store_true',
                help="Whether to keep filtered out bins, otherwise they will be removed from the result matrix. "
                     "Not used yet.")
+p.add_argument("-a", "--alpha", default=0.2,
+               help="AFTER a lot of test : 0.24 is always a good and safe compromise, you must use this value")
 args = p.parse_args(sys.argv[1:])
 
-### YOU ARE SUPPOSED TO ONLY MODIFY VALUE HERE ###
 # input file
 Operation = args.operation
-bedfilename = args.bedfilename  # '/mnt/imaging.data/mdas/combine_N2_Arima_hicpro/hic_results/matrix/N2/raw/5000/N2_5000_abs.bed'
-matrixfilename = args.matrixfilename  # '/mnt/imaging.data/mdas/combine_N2_Arima_hicpro/hic_results/matrix/N2/raw/5000/N2_5000.matrix'
+bedfilename = args.bedfilename
+matrixfilename = args.matrixfilename
 chromosomes = args.chromosomes
 format = args.format
 keep_filtered_bins = args.keep_filtered_bins
 genome_assembly = args.genome_assembly
-
-# default parameter
-alpha = 0.2  # AFTER a lot of test : 0.24 is always a good and safe compromise, you must use this value
-
+alpha = args.alpha
 
 ###
 

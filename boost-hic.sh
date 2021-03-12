@@ -12,4 +12,4 @@
 source <your_home>/miniconda3/bin/activate boost-hic
 
 echo "CALL: Boost-HiC/main.py $@"
-python3 -u <your_home>software/github/Boost-HiC/main.py "$@"
+python3 -u <your_instalation_home>/Boost-HiC/boost-hic.py "$@"
