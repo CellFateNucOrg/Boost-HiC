@@ -79,7 +79,7 @@ Some usefull tool are available in HiCtools.py if you need to made your own scri
 
 Here all CLI (command line interface) parameters:
 
-`
+
     usage: boost-hic.py [-h] -b BEDFILENAME -m MATRIXFILENAME [-c CHROMOSOMES [CHROMOSOMES ...]] [-o OUTPUT_PREFIX]
     [-f {cool,hdf5}] [-g GENOME_ASSEMBLY] [-k]
     {boost,sample}
@@ -118,7 +118,6 @@ Here all CLI (command line interface) parameters:
     -a ALPHA, --alpha ALPHA
     AFTER a lot of test : 0.24 is always a good and safe compromise, you must use this
     value
-`
 
 Example call:
 
