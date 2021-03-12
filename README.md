@@ -80,44 +80,44 @@ Some usefull tool are available in HiCtools.py if you need to made your own scri
 Here all CLI (command line interface) parameters:
 
 `
-usage: boost-hic.py [-h] -b BEDFILENAME -m MATRIXFILENAME [-c CHROMOSOMES [CHROMOSOMES ...]] [-o OUTPUT_PREFIX]
-[-f {cool,hdf5}] [-g GENOME_ASSEMBLY] [-k]
-{boost,sample}
-
-positional arguments:
-{boost,sample}        Operation to be executed
-
-optional arguments:
-
--h, --help            show this help message and exit
-
--b BEDFILENAME, --bedfilename BEDFILENAME
-bed file of genomic coordinate of each bin
-
--m MATRIXFILENAME, --matrixfilename MATRIXFILENAME
-contact map stored in tab separated file as : bin_i / bin_j / counts_ij Only no zero
-values are stored. Contact map are symmetric
-
--c CHROMOSOMES [CHROMOSOMES ...], --chromosomes CHROMOSOMES [CHROMOSOMES ...]
-Which chromosomes to boost, otherwise all chromosomes
-
--o OUTPUT_PREFIX, --output_prefix OUTPUT_PREFIX
-prefix for output files
-
--f {cool,hdf5}, --format {cool,hdf5}
-output file format
-
--g GENOME_ASSEMBLY, --genome_assembly GENOME_ASSEMBLY
-genome assembly as metadata for .cool file
-
--k, --keep_filtered_bins
-Whether to keep filtered out bins, otherwise they will be removed from the result
-matrix. Not used yet.
-
--a ALPHA, --alpha ALPHA
-AFTER a lot of test : 0.24 is always a good and safe compromise, you must use this
-value
-
+    usage: boost-hic.py [-h] -b BEDFILENAME -m MATRIXFILENAME [-c CHROMOSOMES [CHROMOSOMES ...]] [-o OUTPUT_PREFIX]
+    [-f {cool,hdf5}] [-g GENOME_ASSEMBLY] [-k]
+    {boost,sample}
+    
+    positional arguments:
+    {boost,sample}        Operation to be executed
+    
+    optional arguments:
+    
+    -h, --help            show this help message and exit
+    
+    -b BEDFILENAME, --bedfilename BEDFILENAME
+    bed file of genomic coordinate of each bin
+    
+    -m MATRIXFILENAME, --matrixfilename MATRIXFILENAME
+    contact map stored in tab separated file as : bin_i / bin_j / counts_ij Only no zero
+    values are stored. Contact map are symmetric
+    
+    -c CHROMOSOMES [CHROMOSOMES ...], --chromosomes CHROMOSOMES [CHROMOSOMES ...]
+    Which chromosomes to boost, otherwise all chromosomes
+    
+    -o OUTPUT_PREFIX, --output_prefix OUTPUT_PREFIX
+    Prefix for output files, including output folder. If not given, it will be the same
+    as the input matrixfilename without its file extension butplus '\_boosted\_'.
+    
+    -f {cool,hdf5}, --format {cool,hdf5}
+    output file format
+    
+    -g GENOME_ASSEMBLY, --genome_assembly GENOME_ASSEMBLY
+    genome assembly as metadata for .cool file
+    
+    -k, --keep_filtered_bins
+    Whether to keep filtered out bins, otherwise they will be removed from the result
+    matrix. Not used yet.
+    
+    -a ALPHA, --alpha ALPHA
+    AFTER a lot of test : 0.24 is always a good and safe compromise, you must use this
+    value
 `
 
 Example call:
