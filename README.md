@@ -69,10 +69,15 @@ How to use it
 There is a convenient command line interface (CLI) provided by the python script boost-hic.py 
 
 Important parameter are :
+
 -bedfilename : bed file of genomic coordinate of each bin
+
 -Operation : 'Boost' or 'Sample'
+
 -output_prefix : prefix used to save the output files
+
 -format : output format. Possible values: cool, hdf5. Default: cool
+
 -alpha : the alpha used to Boost-HiC, with preset default value
 
 Some usefull tool are available in HiCtools.py if you need to made your own script.
