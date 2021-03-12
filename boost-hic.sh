@@ -9,7 +9,9 @@
 ##SBATCH --mail-user=your@email
 ##SBATCH --mail-type=fail,end
 
-source <your_home>/miniconda3/bin/activate boost-hic
+# This line have to be updated to your environment
+source ~/miniconda3/bin/activate boost-hic
 
 echo "CALL: Boost-HiC/main.py $@"
-python3 -u <your_instalation_home>/Boost-HiC/boost-hic.py "$@"
+# This line have to be updated to your environment
+python3 -u ~/software/github/Boost-HiC/boost-hic.py "$@"
