@@ -91,7 +91,7 @@ pixels_boosted = pd.DataFrame(columns=['bin1_id', 'bin2_id', 'count'])
 chroms = chromosomes if chromosomes else D.keys()
 bin_offs = 0
 for chrom in chroms:
-    repositoryout = f'{args.output_prefix}_{chrom}_'
+    repositoryout = f'{output_prefix}_{chrom}_'
 
     beginfend = D[chrom][0]
     endfend = D[chrom][1]
@@ -144,7 +144,7 @@ for chrom in chroms:
         Sample(basematfilter, repositoryout)
 
 if Operation == "boost" and format is None or format == "cool":  # combined file support only for .cool
-    repositoryout = args.output_prefix + (f'_{"_".join(chromosomes)}_' if chromosomes else '_')
+    repositoryout = output_prefix + (f'_{"_".join(chromosomes)}_' if chromosomes else '_')
     cool_file = f"{repositoryout}boosted{'_kfb' if keep_filtered_bins else ''}.cool"
     convert.create_cool(bins_boosted, pixels_boosted, resolution, cool_file, genome_assembly=genome_assembly)
 
