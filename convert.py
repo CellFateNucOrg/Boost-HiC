@@ -2,7 +2,7 @@
 # december 2016
 # CC-By-SA
 # now in py 3
-
+import math
 
 import numpy as np
 import pandas as pd
@@ -33,6 +33,18 @@ def loadabsdatafile(filein):
     # d["all"]=[float(1), float(d_Total)]
     return d, d_Total, resolution
 
+
+def loadabsdatafile_cool(cool_file):
+    mat_cooler = cooler.Cooler(f'{cool_file}::/')
+    resolution = mat_cooler.binsize
+    d = {}
+    cur_pos = 0.
+    for chrom in mat_cooler.chromnames:
+        chrom_size = math.ceil(mat_cooler.chromsizes[chrom] / resolution)
+        d[chrom] = [cur_pos, cur_pos + chrom_size]
+        cur_pos += chrom_size
+    d_Total = cur_pos
+    return d, d_Total, resolution, mat_cooler
 
 def loadmatrix(filein, sizemat):
     """

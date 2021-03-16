@@ -14,6 +14,9 @@ import HiCutils
 import convert
 import utils
 
+
+DEFAULT_OUTPUT_FOLDER = './boosted/'
+
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger("").setLevel(logging.INFO)
 logger = logging.getLogger(f'Boos-HiC')
@@ -21,15 +24,15 @@ logger = logging.getLogger(f'Boos-HiC')
 p = argparse.ArgumentParser()
 p.add_argument("operation", default="boost", choices=["boost", "sample"],
                help="Operation to be executed")
-p.add_argument("-b", "--bedfilename", required=True, help="bed file of genomic coordinate of each bin")
 p.add_argument("-m", "--matrixfilename", required=True,
                help="contact map stored in tab separated file as : "
-                    "bin_i / bin_j / counts_ij Only no zero values are stored. Contact map are symmetric")
-# TODO add support for input .cool file
+                    "bin_i / bin_j / counts_ij Only no zero values are stored. Contact map are symmetric. "
+                    "Alternatively, you can provide a cooler format file (.cool), in this case no --bedfilename is needed.")
+p.add_argument("-b", "--bedfilename", help="bed file of genomic coordinate of each bin")
 p.add_argument("-c", "--chromosomes", nargs='+', help="Which chromosomes to boost, otherwise all chromosomes")
 p.add_argument("-o", "--output_prefix", default=None,
                help="Prefix for output files, including the output folder. "
-                    "If not given, it will be in subfolder './boosted/' plus basename of the input matrixfilename "
+                    f"If not given, it will be in subfolder '{DEFAULT_OUTPUT_FOLDER}' plus basename of the input matrixfilename "
                     "without its file extension.")
 p.add_argument("-f", "--format", default="cool", choices=["cool", "hdf5"], help="output file format")
 p.add_argument("-g", "--genome_assembly", default="ce11", help="genome assembly as metadata for .cool file")
@@ -53,7 +56,9 @@ alpha = args.alpha
 if args.output_prefix:
     output_prefix = args.output_prefix
 else:
-    output_prefix = './boosted/' + os.path.splitext(os.path.basename(matrixfilename))[0]
+    if not os.path.exists(DEFAULT_OUTPUT_FOLDER):
+        os.mkdir(DEFAULT_OUTPUT_FOLDER)
+    output_prefix = DEFAULT_OUTPUT_FOLDER + os.path.splitext(os.path.basename(matrixfilename))[0]
     # alternative in the same folder of the input matrix
     # output_prefix = os.path.splitext(matrixfilename)[0]
 
@@ -82,7 +87,11 @@ def Sample(amat, repositoryout):
 # ## CODE EXECUTION ## #
 # load the data
 logger.info("LOADING MATRIX")
-D, total, resolution = convert.loadabsdatafile(bedfilename)
+if matrixfilename.endswith('.cool'):
+    D, total, resolution, D_cooler = convert.loadabsdatafile_cool(matrixfilename)
+else:
+    D, total, resolution = convert.loadabsdatafile(bedfilename)
+    D_cooler = None
 print(*D.items(), sep='\n')
 print(f'Total bins:{total} resolution:{resolution}')
 
@@ -93,10 +102,13 @@ bin_offs = 0
 for chrom in chroms:
     repositoryout = f'{output_prefix}_{chrom}_'
 
-    beginfend = D[chrom][0]
-    endfend = D[chrom][1]
-    logger.info(f"Chromosome {chrom} data fend : {beginfend},{endfend}")
-    basemat = convert.loadmatrixselected(matrixfilename, beginfend, endfend)
+    if D_cooler:
+        basemat = D_cooler.matrix(balance=False).fetch(chrom)
+    else:
+        beginfend = D[chrom][0]
+        endfend = D[chrom][1]
+        logger.info(f"Chromosome {chrom} data fend : {beginfend},{endfend}")
+        basemat = convert.loadmatrixselected(matrixfilename, beginfend, endfend)
 
     # matrix filtering
     logger.info("FILTERING")
@@ -135,6 +147,10 @@ for chrom in chroms:
             chrom_bins, chrom_pixels = convert.get_bins_pixels(boosted, chrom, resolution,
                                                                bin_offs=bin_offs, bins_num=bins_num,
                                                                filtered_bins=filtered_bins)
+            # save as cool
+            cool_file = f"{repositoryout}boosted.cool"
+            convert.create_cool(chrom_bins, chrom_pixels, resolution, cool_file, genome_assembly=genome_assembly)
+            # collecting all boosted chromosomes in one
             bins_boosted = pd.concat([bins_boosted, chrom_bins])
             pixels_boosted = pd.concat([pixels_boosted, chrom_pixels])
             bin_offs += bins_num

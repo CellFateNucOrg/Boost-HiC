@@ -101,7 +101,8 @@ Here all CLI (command line interface) parameters:
     
     -m MATRIXFILENAME, --matrixfilename MATRIXFILENAME
     contact map stored in tab separated file as : bin_i / bin_j / counts_ij Only no zero
-    values are stored. Contact map are symmetric
+    values are stored. Contact map are symmetric. Alternatively, you can provide a 
+    cooler format file (.cool), in this case no --bedfilename is needed.
     
     -c CHROMOSOMES [CHROMOSOMES ...], --chromosomes CHROMOSOMES [CHROMOSOMES ...]
     Which chromosomes to boost, otherwise all chromosomes
